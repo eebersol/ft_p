@@ -6,7 +6,7 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/14 16:30:52 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/17 17:21:45 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,15 @@ void		exec_ls(char **cmd, int socket)
 	return ;
 }
 
-void	find_cmd(char *buf, char **cmd, int socket)
-{	char 	**tmp_cmd;
+void	find_cmd(char **cmd, int socket)
+{	
 	
-	tmp_cmd = ft_strsplit(buf, ' ');
-	cmd[0] = tmp_cmd[0];
-	cmd[1] = tmp_cmd[1];
-	if (ft_strcmp(cmd[0], "ls") == 0)
+	if (ft_strcmp(cmd[1], "ls") == 0)
 		exec_ls(cmd, socket);
-	else if (ft_strcmp(cmd[0], "cd") == 0)
+	else if (ft_strcmp(cmd[1], "cd") == 0)
 		cd(cmd);
-	else if (ft_strcmp(cmd[0], "pwd") == 0)
+	else if (ft_strcmp(cmd[1], "pwd") == 0)
 		pwd();
-	tmp_cmd = ft_strsplit(buf, ':');
-	if (ft_strcmp(tmp_cmd[1], "put") == 0)
-	{
-		server_put_file(tmp_cmd);
-	}
 	else
 		write(recover_env()->socket, "Command not found.\n", 19); 
 }
@@ -88,9 +80,10 @@ int main(int ac, char **av)
 	int 				r;
 	int 				pid;
 	char 				buf[1024];
-	char 				*cmd[2];
+	char 				**cmd;
 
 	pid = 0;
+	cmd = NULL;
 	if (ac != 2)
 		usage_server(av[0]);
 	env = init_env();
@@ -107,10 +100,22 @@ int main(int ac, char **av)
 		if ((pid = fork()) == 0)
 		{
 			env->socket = cs;
-			while((r = read(cs, buf, 1023)) > 0)
+			while((r = read(cs, &buf, 1023)) > 0)
 			{
+				//printf("ici\n");
 				buf[r] = '\0';
-				find_cmd(buf, cmd, cs);
+				cmd = ft_strsplit(buf, ':');
+				if (ft_strcmp(cmd[1], "put") != 0)
+				{
+					find_cmd(cmd, cs);
+				}
+				else
+				{
+					server_put_file(cmd, cs);
+					write(cs, "\n", 1);
+				}
+			//	printf(" la %s\n", buf);
+				ft_bzero(&buf, 1023);
 			}
 			if (r == 0)
 				ft_putstr("Client disconnect.");

@@ -6,7 +6,7 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/14 16:41:24 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/17 17:14:46 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,19 @@ int main(int ac, char **av)
 				close(sock);
 				exit(0);
 			}
-			if (ft_strcmp(arg[0], "put") == 0)
+			else if (ft_strcmp(arg[0], "put") == 0)
 			{
-				buf = put_file(arg);
+				put_file(arg, sock);
 			}
-			else if (send(sock, buf, strlen(buf), 0) < 0)
+			else
 			{
-				ft_putstr("Send failed");
-				return (1);
-			}
+				if (send(sock, buf, strlen(buf), 0) < 0)
+				{
+					ft_putstr("Send failed");
+					return (1);
+				}
 			//Receive a reply from the server
+			}
 			if (recv(sock, server_reply, 1024, 0) < 0)
 			{
 				ft_putstr("[client]: recv failed");
