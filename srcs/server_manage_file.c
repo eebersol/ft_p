@@ -6,7 +6,7 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/17 17:10:16 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/18 16:27:02 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,19 @@ void 	server_put_file(char **arg, int socket)
 	int 	len;
 	char 	buf[1024];
 	
-	(void)socket;
-	(void)arg;
 	len = 0;
-	if ((fd = open(arg[3], O_CREAT|O_WRONLY, 0777)) == -1)
+	ft_bzero(&buf, 1024);
+	if ((fd = open(arg[1], O_CREAT|O_WRONLY, 0777)) == -1)
 		printf("Error open.\n");
+	printf("server_put_file 1\n");
 	while ((r = read(socket, &buf, 1023)) > 0)
 	{
+		printf("server_put_file 2\n");
 		buf[r] = '\0';
+		printf("buf : %s\n", buf);
 		write(fd, buf, r);
 		ft_bzero(&buf, 1024);
 	}
+	printf("server_put_file 3\n");
 	return ;
 }	

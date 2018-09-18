@@ -6,39 +6,41 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/17 17:21:45 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/18 17:30:33 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_p.h>
 
-void		exec_ls(char **cmd, int socket)
+void		exec_ls(int socket)
 {
 	pid_t	pid;
 	int		flag;
+	char 	*cmd[2];
 	int 	status;
 
 	flag = 0;
+	cmd[0] = "/bin/ls";
+	cmd[1] = NULL;
 	dup2(socket, 1);
 	dup2(socket, 2);
 	if ((pid = fork()) == 0)
 	{
-		if ((execve("/bin/ls", cmd, NULL)) != -1)
-			flag = -1;
-		flag = 1;
+		execve(cmd[0], cmd, NULL);
 	}
 	wait4(pid, &status, -1, NULL);
+	close(1);
+	close(2);
 	return ;
 }
 
 void	find_cmd(char **cmd, int socket)
 {	
-	
-	if (ft_strcmp(cmd[1], "ls") == 0)
-		exec_ls(cmd, socket);
-	else if (ft_strcmp(cmd[1], "cd") == 0)
+	if (ft_strcmp(cmd[0], "ls") == 0)
+		exec_ls(socket);
+	else if (ft_strcmp(cmd[0], "cd") == 0)
 		cd(cmd);
-	else if (ft_strcmp(cmd[1], "pwd") == 0)
+	else if (ft_strcmp(cmd[0], "pwd") == 0)
 		pwd();
 	else
 		write(recover_env()->socket, "Command not found.\n", 19); 
@@ -79,14 +81,10 @@ int main(int ac, char **av)
 	struct sockaddr_in 	*csin;
 	int 				r;
 	int 				pid;
-	char 				buf[1024];
-	char 				**cmd;
 
 	pid = 0;
-	cmd = NULL;
 	if (ac != 2)
 		usage_server(av[0]);
-	env = init_env();
 	port = atoi(av[1]);
 	sock = create_server(port);
 	while (1)
@@ -99,24 +97,28 @@ int main(int ac, char **av)
 		// 	usage_server("fork(2)");
 		if ((pid = fork()) == 0)
 		{
+			env = init_env();
+			env->sserver = sock;
 			env->socket = cs;
-			while((r = read(cs, &buf, 1023)) > 0)
-			{
-				//printf("ici\n");
-				buf[r] = '\0';
-				cmd = ft_strsplit(buf, ':');
-				if (ft_strcmp(cmd[1], "put") != 0)
-				{
-					find_cmd(cmd, cs);
-				}
-				else
-				{
-					server_put_file(cmd, cs);
-					write(cs, "\n", 1);
-				}
-			//	printf(" la %s\n", buf);
-				ft_bzero(&buf, 1023);
-			}
+			printf("MAIN\n");
+			r = reader(cs);
+			// while((r = read(cs, &buf, 1023)) > 0)
+			// {
+			// 	buf[r] = '\0';
+			// 	cmd = ft_strsplit(buf, ' ');
+			// 	printf("Name : %s %s %s\n", cmd[0], cmd[1], cmd[2]);
+			// 	if (ft_strcmp(cmd[0], "put") == 0)
+			// 	{
+			// 		printf("Enter\n");
+			// 		server_put_file(cmd, cs);
+			// 		//write(cs, "\n", 1);
+			// 	}
+			// 	else
+			// 	{
+			// 		find_cmd(cmd, cs);
+			// 	}
+			// 	ft_bzero(&buf, 1024);
+			// }
 			if (r == 0)
 				ft_putstr("Client disconnect.");
 			if (r == -1)

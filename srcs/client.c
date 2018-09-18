@@ -6,7 +6,7 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/17 17:14:46 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/18 16:18:18 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int main(int ac, char **av)
 			else if (ft_strcmp(arg[0], "put") == 0)
 			{
 				put_file(arg, sock);
+				printf("ok\n");
 			}
 			else
 			{

@@ -6,7 +6,7 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/17 17:10:33 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/18 17:31:56 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,17 @@
 typedef	struct			s_env
 {
 	int 				socket;
+	int 				sserver;
 	char 				*racine;
+	int 				puts;
+	int 				file_fd;
 }						t_env;
 
 // client.c //
 void 		usage_client (char *str);
 int 		create_client(char *addr, int port);
 // server.c //
-void		exec_ls(char **cmd, int socket);
+void		exec_ls(int socket);
 void 		find_cmd(char **cmd, int socket);
 void		usage_server(char *str);
 int 		create_server(int port);
@@ -50,4 +53,7 @@ t_env		*init_env(void);
 void 	put_file(char **arg, int socket);
 //server_manage_file.c//
 void 	server_put_file(char **arg, int socket);
+//server_reader.c//
+void 	read_file(char *file, int socket);
+int 	reader(int cs);
 #endif

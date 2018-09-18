@@ -6,7 +6,7 @@
 #    By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/04/08 19:11:03 by eebersol          #+#    #+#              #
-#    Updated: 2018/09/14 15:55:53 by eebersol         ###   ########.fr        #
+#    Updated: 2018/09/18 16:59:17 by eebersol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ _SRC_S			= server.c\
 					builtin.c\
 					init.c\
 					server_manage_file.c\
+					server_reader.c\
 
 INCLUDES		= -I./libft/includes/ -I./includes/
 
@@ -64,5 +65,7 @@ fclean:	clean
 	@echo "Clean all .o and .a"
 
 re: fclean all
+
+
 
 .PHONY: clean fclean re
