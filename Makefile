@@ -6,7 +6,7 @@
 #    By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/04/08 19:11:03 by eebersol          #+#    #+#              #
-#    Updated: 2018/09/18 16:59:17 by eebersol         ###   ########.fr        #
+#    Updated: 2018/09/19 18:04:53 by eebersol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,13 @@ LIB				=	./libft/libft.a
 
 _SRC_C			= client.c\
 					client_manage_file.c\
+					builtin_client.c\
+					tools.c\
 
 _SRC_S			= server.c\
-					builtin.c\
-					init.c\
-					server_manage_file.c\
+					builtin_server.c\
 					server_reader.c\
+					tools.c\
 
 INCLUDES		= -I./libft/includes/ -I./includes/
 
@@ -37,7 +38,7 @@ OBJ_S			= $(SRC_S:.c=.o)
 
 CFLAGS			= -Wall -Wextra -Werror
 
-all: $(NAME) $(NAME_OTOOL)
+all: $(NAME_SERVER) $(NAME_CLIENT)
 
 $(NAME_SERVER): $(OBJ_S) 
 	@make -C ./libft/

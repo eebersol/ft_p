@@ -6,7 +6,7 @@
 /*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/09 15:00:21 by eebersol          #+#    #+#             */
-/*   Updated: 2018/09/18 17:31:56 by eebersol         ###   ########.fr       */
+/*   Updated: 2018/09/19 18:01:39 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,75 @@
 # include <errno.h>
 # include <string.h>
 
-typedef	struct			s_env
+# define S_GET "The file is download."
+# define E_GET "The file is not download please retry."
+# define F_SEND "Send failed."
+# define F_RECV "Recv failed"
+# define SUCCESS 1
+# define ERROR -1
+typedef	struct			s_server
 {
 	int 				socket;
 	int 				sserver;
 	char 				*racine;
 	int 				puts;
 	int 				file_fd;
-}						t_env;
+}						t_server;
+
+typedef	struct			s_client
+{
+	int 				socket;
+	char 				*racine;
+}						t_client;
+
+
+// builtin_client.c //
+void 		cd_client(char **cmd, char *path);
+void 		pwd_client(char **cmd);
+void		ls_client(char **cmd);
+void 		client_quit(int socket);
+
+// builtin_server.c //
+void 		cd_server(char **cmd, int cs, char *path);
+void 		pwd_server(int cs, char **cmd);
+void		ls_server(int socket);
 
 // client.c //
+int			find_cmd_client(char **cmd, int sock, char *path);
 void 		usage_client (char *str);
+int 		create_client_ipv6(char *addr, int port);
 int 		create_client(char *addr, int port);
-// server.c //
-void		exec_ls(int socket);
-void 		find_cmd(char **cmd, int socket);
-void		usage_server(char *str);
-int 		create_server(int port);
-// cd.c //
-
-void 		cd(char **cmd);
-void 		pwd(void);
-// init.c //
-t_env		*recover_env(void);
-t_env		*init_env(void);
+void 		minishell(int socket, char *path);
 
 //client_manage_file.c//
-void 	put_file(char **arg, int socket);
-//server_manage_file.c//
-void 	server_put_file(char **arg, int socket);
+void 		put_file_client(char **arg, int socket);
+void 		get_file_client(char **arg, int sock);
+
+// init_client.c //
+t_client	*recover_client(void);
+t_client	*init_client(int sock);
+
+// init_server.c //
+t_server	*recover_server(void);
+t_server	*init_server(int sock);
+
+// server.c //
+void 		server(int sock, char *path, int pid);
+int 		find_cmd_server(char **cmd, int cs, char *path);
+void		usage_server(char *str);
+int 		accept_client_request(int socket);
+int 		create_server(int port);
+
 //server_reader.c//
-void 	read_file(char *file, int socket);
-int 	reader(int cs);
+void	 	get_file_server(int cs, char **cmd);
+void 		put_file_server(int cs, char **cmd);
+int 		reader(int cs, char *path);
+
+
+// tools.c //
+void 	client_quit(int socket);
+void 	log_msg(char *str, int i);
+void 	log_cd(int cs, int type, char *str, char *str2);
+void 	log_put(int cs, int type, char *str, char *str2);
+void 	log_get(int cs, int type, char *str, char *str2);
 #endif
