@@ -6,7 +6,7 @@
 #    By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/04/08 19:11:03 by eebersol          #+#    #+#              #
-#    Updated: 2018/09/19 18:04:53 by eebersol         ###   ########.fr        #
+#    Updated: 2018/09/27 16:59:15 by eebersol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,38 +16,42 @@ NAME_SERVER		= server
 
 NAME_CLIENT		= client
 
-LIB				=	./libft/libft.a
-
-_SRC_C			= client.c\
-					client_manage_file.c\
-					builtin_client.c\
-					tools.c\
-
-_SRC_S			= server.c\
-					builtin_server.c\
-					server_reader.c\
-					tools.c\
+LIB				= ./libft/libft.a
 
 INCLUDES		= -I./libft/includes/ -I./includes/
 
-SRC_C			= $(addprefix srcs/,$(_SRC_C))
-SRC_S			= $(addprefix srcs/,$(_SRC_S))
+CFLAGS			= -Wall -Wextra -Werror
+
+_SRC_C			= client.c\
+					builtin_client.c\
+					put_client.c\
+					get_client.c\
+
+_SRC_S			= server.c\
+					builtin_server.c\
+					put_server.c\
+					get_server.c\
+
+_SRC_SHARE		= shared_function.c\
+
+SRC_C			= $(addprefix srcs/client/,$(_SRC_C))
+SRC_S			= $(addprefix srcs/server/,$(_SRC_S))
+SRC_SHARE		= $(addprefix srcs/shared/,$(_SRC_SHARE))
 
 OBJ_C			= $(SRC_C:.c=.o)
 OBJ_S			= $(SRC_S:.c=.o)
-
-CFLAGS			= -Wall -Wextra -Werror
+OBJ_SHARE		= $(SRC_SHARE:.c=.o)
 
 all: $(NAME_SERVER) $(NAME_CLIENT)
 
-$(NAME_SERVER): $(OBJ_S) 
+$(NAME_SERVER): $(OBJ_S) $(OBJ_SHARE)
 	@make -C ./libft/
-	@gcc $(CFLAGS) -lm -L libft/ -lft $(OBJ_S) $(LIB) $(INCLUDES) -o $(NAME_SERVER)
+	@gcc $(CFLAGS) -lm -L libft/ -lft  $(OBJ_S) $(OBJ_SHARE) $(LIB) $(INCLUDES) -o $(NAME_SERVER)
 	@echo $(NAME_SERVER) " : compiled"
 
-$(NAME_CLIENT): $(OBJ_C) 
+$(NAME_CLIENT): $(OBJ_C) $(OBJ_SHARE)
 	@make -C ./libft/
-	@gcc $(CFLAGS) -lm -L libft/ -lft $(OBJ_C) $(LIB) $(INCLUDES) -o $(NAME_CLIENT)
+	@gcc $(CFLAGS) -lm -L libft/ $(OBJ_C) $(OBJ_SHARE) $(LIB) $(INCLUDES) -o $(NAME_CLIENT)
 	@echo $(NAME_CLIENT) " : compiled"
 
 %.o: %.c
@@ -56,6 +60,7 @@ $(NAME_CLIENT): $(OBJ_C)
 clean:
 	@rm -f $(OBJ_S)
 	@rm -f $(OBJ_C)
+	@rm -f $(OBJ_SHARE)
 	@make clean -C libft
 	@echo "Clean all .o files"
 
