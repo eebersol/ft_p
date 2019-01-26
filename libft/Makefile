@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: qdequele <qdequele@student.42.fr>          +#+  +:+       +#+         #
+#    By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/11/25 14:30:45 by qdequele          #+#    #+#              #
-#    Updated: 2016/11/06 20:23:04 by qdequele         ###   ########.fr        #
+#    Created: 2015/11/25 14:30:45 by eebersol          #+#    #+#              #
+#    Updated: 2016/11/06 20:23:04 by eebersol         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

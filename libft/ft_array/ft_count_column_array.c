@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_count_column_array.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qdequele <qdequele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eebersol <eebersol@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/16 10:32:29 by qdequele          #+#    #+#             */
-/*   Updated: 2016/02/16 15:03:55 by qdequele         ###   ########.fr       */
+/*   Created: 2016/02/16 10:32:29 by eebersol          #+#    #+#             */
+/*   Updated: 2016/02/16 15:03:55 by eebersol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
